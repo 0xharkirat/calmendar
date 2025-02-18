@@ -1,12 +1,20 @@
 import 'package:calmendar/src/controllers/calendar_controller.dart';
+import 'package:calmendar/src/views/widgets/calendar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyHomePage extends ConsumerWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends ConsumerState<MyHomePage> {
+  bool isVisible = true;
+
+  @override
+  Widget build(BuildContext context) {
     final calendarState = ref.watch(calendarController);
 
     final Size size = MediaQuery.of(context).size;
@@ -17,10 +25,12 @@ class MyHomePage extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // Large text for the date
+
+            const Spacer(),
+
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
@@ -85,9 +95,9 @@ class MyHomePage extends ConsumerWidget {
                   visualDensity: VisualDensity.compact,
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    ref.read(calendarController.notifier).updateSelectedDate(
-                        calendarState.selectedDate
-                            .subtract(const Duration(days: 1)));
+                    ref
+                        .read(calendarController.notifier)
+                        .updateSelectedMonth(calendarState.selectedDate, -1);
                   },
                 ),
 
@@ -97,9 +107,9 @@ class MyHomePage extends ConsumerWidget {
                   visualDensity: VisualDensity.compact,
                   icon: const Icon(Icons.arrow_forward_ios),
                   onPressed: () {
-                    ref.read(calendarController.notifier).updateSelectedDate(
-                        calendarState.selectedDate
-                            .add(const Duration(days: 1)));
+                    ref
+                        .read(calendarController.notifier)
+                        .updateSelectedMonth(calendarState.selectedDate, 1);
                   },
                 ),
 
@@ -108,15 +118,24 @@ class MyHomePage extends ConsumerWidget {
 
                 // Eye button
                 IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.remove_red_eye_outlined)),
+                    onPressed: () {
+                      setState(() {
+                        isVisible = !isVisible;
+                      });
+                    },
+                    icon: Icon(isVisible
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined)),
               ],
             ),
 
             SizedBox(height: 16),
 
             // Calendar
-            
+
+            CalendarWidget(
+              isVisible: isVisible,
+            ),
           ],
         ),
       ),

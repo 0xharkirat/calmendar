@@ -7,6 +7,8 @@ void main() {
   runApp(ProviderScope(child: const MyApp()));
 }
 
+const seedColor = Colors.orange;
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
+          seedColor: seedColor,
         ),
         useMaterial3: true,
       ),
