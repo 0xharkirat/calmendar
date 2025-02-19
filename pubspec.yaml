@@ -38,6 +38,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   google_fonts: ^6.2.1
   dotted_border: ^2.1.0
+  flutter_animate: ^4.5.2
 
 dev_dependencies:
   flutter_test:

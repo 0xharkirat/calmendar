@@ -1,6 +1,6 @@
-import 'package:calmendar/main.dart';
 import 'package:calmendar/src/controllers/calendar_controller.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:calmendar/src/views/widgets/current_month_widget.dart';
+import 'package:calmendar/src/views/widgets/not_current_month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -72,21 +72,14 @@ class CalendarWidget extends ConsumerWidget {
             if (index < firstWeekday) {
               // Previous month days
               int prevDay = prevMonthDays - (firstWeekday - index - 1);
-              return DottedBorder(
-                borderType: BorderType.Circle,
-                color: Theme.of(context).colorScheme.outline,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    prevDay.toString(),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isVisible
-                              ? Theme.of(context).colorScheme.outline
-                              : Colors.transparent,
-                        ),
-                  ),
-                ),
+              return NotCurrentMonthWidget(
+                onTap: () {
+                  ref.read(calendarController.notifier).updateSelectedDate(
+                      DateTime(calendarState.selectedDate.year,
+                          calendarState.selectedDate.month - 1, prevDay));
+                },
+                day: prevDay,
+                isVisible: isVisible,
               );
             } else if (index < firstWeekday + daysInMonth) {
               int dayNumber = index - firstWeekday + 1;
@@ -96,57 +89,25 @@ class CalendarWidget extends ConsumerWidget {
               bool isPast = date.isBefore(todayDateOnly);
               bool isFuture = date.isAfter(todayDateOnly);
 
-              return GestureDetector(
-                onTap: () {
-                  ref
-                      .read(calendarController.notifier)
-                      .updateSelectedDate(date);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isToday
-                        ? seedColor
-                        : isPast
-                            ? Theme.of(context)
-                                .colorScheme
-                                .onSurface // Past dates in black
-                            : isFuture
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .outline
-                                    .withValues(
-                                        alpha: 0.5) // Future dates in gray
-                                : Theme.of(context).colorScheme.onSurface,
-                  ),
-                  child: Text(
-                    dayNumber.toString(),
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isVisible
-                              ? Theme.of(context).colorScheme.surface
-                              : Colors.transparent,
-                        ),
-                  ),
-                ),
+              return CurrentMonthWidget(
+                date: date,
+                isToday: isToday,
+                isPast: isPast,
+                isFuture: isFuture,
+                dayNumber: dayNumber,
+                isVisible: isVisible,
               );
             } else {
               // Next month days
               int nextDay = index - (firstWeekday + daysInMonth) + 1;
-              return DottedBorder(
-                borderType: BorderType.Circle,
-                color: Theme.of(context).colorScheme.outline,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    nextDay.toString(),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isVisible? Theme.of(context).colorScheme.outline : Colors.transparent,
-                        ),
-                  ),
-                ),
+              return NotCurrentMonthWidget(
+                onTap: () {
+                  ref.read(calendarController.notifier).updateSelectedDate(
+                      DateTime(calendarState.selectedDate.year,
+                          calendarState.selectedDate.month + 1, nextDay));
+                },
+                day: nextDay,
+                isVisible: isVisible,
               );
             }
           },
