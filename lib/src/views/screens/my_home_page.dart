@@ -1,4 +1,5 @@
 import 'package:calmendar/src/controllers/calendar_controller.dart';
+import 'package:calmendar/src/controllers/seed_color_controller.dart';
 import 'package:calmendar/src/views/widgets/calendar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,6 +25,41 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceDim,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surfaceDim,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final selectedColor = await showMenu<Color>(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                    100, 100, 0, 0), // Position near button
+                items: colors
+                    .map(
+                      (color) => PopupMenuItem(
+                        value: color,
+                        child: Row(children: [
+                          Icon(Icons.circle, color: color),
+                          SizedBox(width: 8),
+                          Text(color.name)
+                        ]),
+                      ),
+                    )
+                    .toList(),
+              );
+
+              if (selectedColor != null) {
+                // Do something with the selected color
+                ref
+                    .read(seedColorController.notifier)
+                    .updateSeedColor(selectedColor);
+              }
+            },
+            icon: const Icon(Icons.color_lens_outlined),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(

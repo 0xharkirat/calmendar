@@ -1,5 +1,6 @@
 import 'package:calmendar/main.dart';
 import 'package:calmendar/src/controllers/calendar_controller.dart';
+import 'package:calmendar/src/controllers/seed_color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,8 +29,10 @@ class CurrentMonthWidget extends ConsumerStatefulWidget {
 
 class _CurrentMonthWidgetState extends ConsumerState<CurrentMonthWidget> {
   bool _isHovering = false;
+  
   @override
   Widget build(BuildContext context) {
+    final seedColor = ref.watch(seedColorController);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) {

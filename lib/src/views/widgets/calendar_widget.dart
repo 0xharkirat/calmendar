@@ -11,6 +11,11 @@ class CalendarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double cellSize = 56;
+    double spacing =
+        4.0; // Adjust this based on your mainAxisSpacing in GridView
+    double calendarHeight =
+        (cellSize * 6) + (spacing * 5); // Total height for 6 rows
     final calendarState = ref.watch(calendarController);
     final firstDayOfMonth = ref
         .read(calendarController.notifier)
@@ -57,60 +62,63 @@ class CalendarWidget extends ConsumerWidget {
         ),
 
         // Grid of days
-        GridView.builder(
-          padding: EdgeInsets.all(8),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(), // Disable scrolling
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7, // 7 columns for each weekday
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-          ),
-          itemCount:
-              totalSlots + (7 - (totalSlots % 7)), // Ensure full last row
-          itemBuilder: (context, index) {
-            if (index < firstWeekday) {
-              // Previous month days
-              int prevDay = prevMonthDays - (firstWeekday - index - 1);
-              return NotCurrentMonthWidget(
-                onTap: () {
-                  ref.read(calendarController.notifier).updateSelectedDate(
-                      DateTime(calendarState.selectedDate.year,
-                          calendarState.selectedDate.month - 1, prevDay));
-                },
-                day: prevDay,
-                isVisible: isVisible,
-              );
-            } else if (index < firstWeekday + daysInMonth) {
-              int dayNumber = index - firstWeekday + 1;
-              final date = DateTime(calendarState.selectedDate.year,
-                  calendarState.selectedDate.month, dayNumber);
-              bool isToday = date.isAtSameMomentAs(todayDateOnly);
-              bool isPast = date.isBefore(todayDateOnly);
-              bool isFuture = date.isAfter(todayDateOnly);
+        SizedBox(
+          height: calendarHeight,
+          child: GridView.builder(
+            padding: EdgeInsets.all(8),
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(), // Disable scrolling
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7, // 7 columns for each weekday
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+            ),
+            itemCount:
+                totalSlots + (7 - (totalSlots % 7)), // Ensure full last row
+            itemBuilder: (context, index) {
+              if (index < firstWeekday) {
+                // Previous month days
+                int prevDay = prevMonthDays - (firstWeekday - index - 1);
+                return NotCurrentMonthWidget(
+                  onTap: () {
+                    ref.read(calendarController.notifier).updateSelectedDate(
+                        DateTime(calendarState.selectedDate.year,
+                            calendarState.selectedDate.month - 1, prevDay));
+                  },
+                  day: prevDay,
+                  isVisible: isVisible,
+                );
+              } else if (index < firstWeekday + daysInMonth) {
+                int dayNumber = index - firstWeekday + 1;
+                final date = DateTime(calendarState.selectedDate.year,
+                    calendarState.selectedDate.month, dayNumber);
+                bool isToday = date.isAtSameMomentAs(todayDateOnly);
+                bool isPast = date.isBefore(todayDateOnly);
+                bool isFuture = date.isAfter(todayDateOnly);
 
-              return CurrentMonthWidget(
-                date: date,
-                isToday: isToday,
-                isPast: isPast,
-                isFuture: isFuture,
-                dayNumber: dayNumber,
-                isVisible: isVisible,
-              );
-            } else {
-              // Next month days
-              int nextDay = index - (firstWeekday + daysInMonth) + 1;
-              return NotCurrentMonthWidget(
-                onTap: () {
-                  ref.read(calendarController.notifier).updateSelectedDate(
-                      DateTime(calendarState.selectedDate.year,
-                          calendarState.selectedDate.month + 1, nextDay));
-                },
-                day: nextDay,
-                isVisible: isVisible,
-              );
-            }
-          },
+                return CurrentMonthWidget(
+                  date: date,
+                  isToday: isToday,
+                  isPast: isPast,
+                  isFuture: isFuture,
+                  dayNumber: dayNumber,
+                  isVisible: isVisible,
+                );
+              } else {
+                // Next month days
+                int nextDay = index - (firstWeekday + daysInMonth) + 1;
+                return NotCurrentMonthWidget(
+                  onTap: () {
+                    ref.read(calendarController.notifier).updateSelectedDate(
+                        DateTime(calendarState.selectedDate.year,
+                            calendarState.selectedDate.month + 1, nextDay));
+                  },
+                  day: nextDay,
+                  isVisible: isVisible,
+                );
+              }
+            },
+          ),
         ),
       ],
     );
