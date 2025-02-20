@@ -29,7 +29,11 @@ I was scrolling through Twitter and came across a beautiful **clean and modern c
 
 ## 🎥 Demo
 
-![Project Demo](docs/calmendar.mp4)  
+ 
+
+https://github.com/user-attachments/assets/dbebb6a4-e847-4f0c-84dd-463f07a14158
+
+
 <!-- 🔗 Watch the full **demo video** here: [INSERT_DEMO_VIDEO_LINK_HERE]   -->
 
 ## 🛠️ Tech Stack
