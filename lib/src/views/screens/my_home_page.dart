@@ -1,6 +1,6 @@
 import 'package:calmendar/src/controllers/calendar_controller.dart';
-import 'package:calmendar/src/controllers/seed_color_controller.dart';
 import 'package:calmendar/src/views/widgets/calendar_widget.dart';
+import 'package:calmendar/src/views/widgets/color_switcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,47 +19,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final calendarState = ref.watch(calendarController);
-
     final Size size = MediaQuery.of(context).size;
     final dateHeight = size.height * 0.15;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceDim,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surfaceDim,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final selectedColor = await showMenu<Color>(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                    100, 100, 0, 0), // Position near button
-                items: colors
-                    .map(
-                      (color) => PopupMenuItem(
-                        value: color,
-                        child: Row(children: [
-                          Icon(Icons.circle, color: color),
-                          SizedBox(width: 8),
-                          Text(color.name)
-                        ]),
-                      ),
-                    )
-                    .toList(),
-              );
-
-              if (selectedColor != null) {
-                // Do something with the selected color
-                ref
-                    .read(seedColorController.notifier)
-                    .updateSeedColor(selectedColor);
-              }
-            },
-            icon: const Icon(Icons.color_lens_outlined),
-          ),
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -68,10 +32,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Large text for the date
-
+                // AppBar with Color Picker
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ColorSwitcherWidget(),
+                  ],
+                ),
                 const Spacer(),
-
                 MouseRegion(
                   onEnter: (_) {
                     setState(() {
@@ -86,9 +54,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      ref
-                          .read(calendarController.notifier)
-                          .updateSelectedDate(DateTime.now());
+                      ref.read(calendarController.notifier).updateSelectedDate(DateTime.now());
                     },
                     child: Text(
                       calendarState.selectedDate.day.toString(),
@@ -104,11 +70,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           end: 0.5,
                           color: Theme.of(context).colorScheme.outlineVariant,
                         )
-                        .scaleXY(
-                            begin: 1, end: 1.01, curve: Curves.easeInOutCubic),
+                        .scaleXY(begin: 1, end: 1.01, curve: Curves.easeInOutCubic),
                   ),
                 ),
-
                 SizedBox(height: 16),
                 // Row for the month & day name
                 Row(
@@ -116,29 +80,23 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     // Month
                     Text(
                       calendarState.month.toUpperCase(),
-                      style:
-                          Theme.of(context).textTheme.displayMedium!.copyWith(
-                                fontSize: dateHeight * 0.25,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                            fontSize: dateHeight * 0.25,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
-
-                    // Spacer
                     const Spacer(),
-
                     // Day name
                     Text(
                       calendarState.dayName,
-                      style:
-                          Theme.of(context).textTheme.displayMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontSize: dateHeight * 0.25,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontSize: dateHeight * 0.25,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ],
                 ),
-                // Year
                 Text(
                   calendarState.year.toString(),
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
@@ -146,41 +104,28 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         fontSize: dateHeight * 0.20,
                       ),
                 ),
-
                 SizedBox(height: 16),
-
-                // Row for the controls
                 Row(
                   children: <Widget>[
-                    // Left arrow
                     IconButton(
                       padding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(Icons.arrow_back_ios),
                       onPressed: () {
-                        ref
-                            .read(calendarController.notifier)
-                            .updateSelectedMonth(
-                                calendarState.selectedDate, -1);
+                        ref.read(calendarController.notifier).updateSelectedMonth(
+                            calendarState.selectedDate, -1);
                       },
                     ),
-
-                    // Right arrow
                     IconButton(
                       padding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(Icons.arrow_forward_ios),
                       onPressed: () {
-                        ref
-                            .read(calendarController.notifier)
-                            .updateSelectedMonth(calendarState.selectedDate, 1);
+                        ref.read(calendarController.notifier).updateSelectedMonth(
+                            calendarState.selectedDate, 1);
                       },
                     ),
-
-                    // Spacer
                     const Spacer(),
-
-                    // Eye button
                     IconButton(
                         onPressed: () {
                           setState(() {
@@ -192,11 +137,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             : Icons.visibility_outlined)),
                   ],
                 ),
-
                 SizedBox(height: 16),
-
-                // Calendar
-
                 CalendarWidget(
                   isVisible: isVisible,
                 ),

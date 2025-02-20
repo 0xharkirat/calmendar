@@ -1,4 +1,4 @@
-import 'package:calmendar/main.dart';
+
 import 'package:calmendar/src/controllers/calendar_controller.dart';
 import 'package:calmendar/src/controllers/seed_color_controller.dart';
 import 'package:flutter/material.dart';
