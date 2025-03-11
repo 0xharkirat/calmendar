@@ -20,7 +20,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Calmendar',
       theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme(),
+        textTheme: GoogleFonts.onestTextTheme(),
         colorScheme: ColorScheme.fromSeed(
           seedColor: seedColor,
         ),

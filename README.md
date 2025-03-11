@@ -40,7 +40,7 @@ https://github.com/user-attachments/assets/dbebb6a4-e847-4f0c-84dd-463f07a14158
 
 - **Flutter** (for UI & responsiveness)
 - **Flutter Riverpod** (state management)
-- **Google Fonts** (Inter)
+- **Google Fonts** (Onest)
 - **`flutter_animate`** (animations)
 - **`dotted_border`** (for dotted border)
 
