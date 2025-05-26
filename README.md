@@ -1,6 +1,7 @@
-# 🗓️ Calmendar - A Clean & Minimal Calendar UI
+# 🗓️ [Calmendar](https://calmendar.web.app) - A Clean & Minimal Calendar UI
 
 ## 🌟 Introduction
+Live Site: [calmendar.web.app](https://calmendar.web.app)
 
 I was scrolling through Twitter and came across a beautiful **clean and modern calendar UI design** by [@inkko44](https://x.com/inkko44/status/1889889273190760459). The design really stood out to me with its simplicity and calm aesthetic, so I decided to **recreate it in Flutter**.
 
